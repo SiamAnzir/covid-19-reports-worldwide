@@ -7,7 +7,6 @@ export const fetchGlobalData = async () => {
         const {data: { confirmed, recovered, deaths, lastUpdate }} = await axios.get(url)
 
         return { confirmed, recovered, deaths, lastUpdate };
-        //console.log(data);
     }
     catch (error){
         return error
@@ -34,5 +33,24 @@ export const fetchDailyData = async () => {
     }
     catch (error){
         return error
+    }
+}
+export const fetchCountriesData = async () => {
+    try {
+        const { data } = await axios.get(`https://disease.sh/v3/covid-19/countries/`);
+
+        return data.map((country) => country.country);
+    } catch (error) {
+        return error;
+    }
+};
+
+export const fetchCountryInfo = async (country) => {
+    try {
+        const { data } = await axios.get(`https://disease.sh/v3/covid-19/countries/${country}`);
+
+        return {data};
+    } catch (error) {
+        return error;
     }
 }
