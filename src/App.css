@@ -1,3 +1,11 @@
+body {
+  background-color: rgb(250, 250,250);
+}
+.app-container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
 .App {
   text-align: center;
 }
@@ -5,6 +13,57 @@
 .App-logo {
   height: 40vmin;
   pointer-events: none;
+}
+.card-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 50px 0;
+}
+
+.card {
+  margin: 0 2% !important;
+  border: 1px solid beige;
+}
+
+.infected {
+  border-bottom: 10px solid rgba(0, 0, 255, 0.5);
+}
+
+.recovered{
+  border-bottom: 10px solid rgba(0, 255, 0, 0.5);
+}
+
+.deaths{
+  border-bottom: 10px solid rgba(255, 0, 0, 0.5);
+}
+
+.chart-container {
+  display: flex;
+  justify-content: center;
+  width: 65%;
+}
+.selectCountry{
+  text-align: center;
+}
+
+.formControl {
+  width: 30%;
+  margin-bottom: 30px !important;
+}
+.flagLogo{
+  height: 20px;
+  width: 35px;
+  margin-left: .5rem;
+}
+
+@media only screen and (max-width: 770px) {
+  .app-container {
+    margin: 0 10%;
+  }
+  .card {
+    margin: 2% 0 !important;
+  }
 }
 
 @media (prefers-reduced-motion: no-preference) {
