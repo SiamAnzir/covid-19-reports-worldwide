@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import {Line} from "react-chartjs-2";
 import {fetchDailyData} from "../api";
 import { Container, Typography} from "@material-ui/core";
+import {Loading} from "./Skeleton";
 
 export const LineChart = () => {
     const [dailyData,setDailyData] = useState([]);
@@ -21,9 +22,8 @@ export const LineChart = () => {
             fetchResult().then(response => response);
         },[]
     );
-    console.log(dailyData);
     if (!dailyData[0]) {
-        return 'Loading...';
+        return <Loading/>;
     }
     let dates = [];
     let allCases = [];
@@ -48,15 +48,15 @@ export const LineChart = () => {
                         data: allCases.map((data) => data),
                         label: 'Infected',
                         borderColor: '#3333ff',
-                        borderWidth: 0.5,
-                        fill: true,
+                        fill: false,
+                        tension: 0.1,
                     },{
                         data: allRecovered.map((data) => data),
                         label: 'Recovered',
                         borderColor: 'green',
                         backgroundColor: 'rgba(0, 255, 0, 0.5)',
-                        borderWidth: 0.1,
-                        fill: true,
+                        fill: false,
+                        tension: 0.1,
                     },
                     ],
                 }}
@@ -97,4 +97,4 @@ export const LineChart = () => {
             </div>
         </Container>
     )
-}
+};

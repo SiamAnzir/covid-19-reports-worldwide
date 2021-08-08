@@ -1,17 +1,21 @@
 // noinspection JSUnresolvedVariable
 
-import React,{useState,useEffect} from "react";
+import React, {useState, useEffect, lazy,Suspense} from "react";
 import {fetchCountriesData,fetchCountryInfo,fetchCountryDailyData} from "../api";
 import {FormControl, NativeSelect, Container, Typography, Grid} from "@material-ui/core";
-import CardComponent from "./CardComponent";
 import {Pie} from "react-chartjs-2";
 import {CountryLineChart} from "./CountryChart";
+import {Loading} from "./Skeleton";
+
+const CardComponent = lazy(() => import('./CardComponent'));
 
 export const SelectCountry = () => {
 
     const [countries, setCountries] = useState([]);
     const [country, setCountry] = useState({});
     const [dailyData,setDailyData] = useState({});
+    const [error,setError] = useState(false);
+    const [loading,setLoading] = useState(false);
 
     useEffect(() => {
         const fetchCountriesAPI = async () => {
@@ -21,11 +25,24 @@ export const SelectCountry = () => {
         fetchCountriesAPI().then(response => response);
     }, []);
     const handleCountryChange = async (country) => {
+        setLoading(true);
         const data = await fetchCountryInfo(country);
+        if(data){
+            setCountry(data);
+            setLoading(false);
+        }
         const dailyInfo = await fetchCountryDailyData(country);
-        console.log(country);
-        setCountry(data);
-        setDailyData(dailyInfo.data.timeline);
+        if(dailyInfo.data){
+            setDailyData(dailyInfo.data.timeline);
+            setError(false);
+            setLoading(false);
+        }else {
+            setError(true);
+            setLoading(false);
+        }
+    }
+    if(loading){
+        return <Loading/>;
     }
     return(
         <Container className="selectCountry">
@@ -45,61 +62,71 @@ export const SelectCountry = () => {
                 ) : (
                     <Container>
                         <div className="card-container">
-                            <Typography gutterBottom variant="h5" component="h3">Showing Results for {country.data.country} <img className="flagLogo" src={country.data.countryInfo.flag} alt="countryFlag"/> </Typography>
+                            <Suspense fallback={<Loading/>}>
+                                <Typography gutterBottom variant="h5" component="h3">Showing Results for {country.data.country} <img className="flagLogo" src={country.data.countryInfo.flag} alt="countryFlag"/> </Typography>
+                                <br/>
+                                <Grid container spacing={3} justifyContent="center">
+                                    <CardComponent
+                                        className="infected"
+                                        cardTitle="Last 24 hours Infected"
+                                        value={country.data.todayCases}
+                                        cardSubtitle="Active cases for COVID-19."
+                                        lastUpdate={country.data.updated}
+                                    />
+                                    <CardComponent
+                                        className="recovered"
+                                        cardTitle="Last 24 hours Recovered"
+                                        value={country.data.todayRecovered}
+                                        cardSubtitle="Recoveries from COVID-19."
+                                        lastUpdate={country.data.updated}
+                                    />
+                                    <CardComponent
+                                        className="deaths"
+                                        cardTitle="Last 24 hours Deaths"
+                                        value={country.data.todayDeaths}
+                                        cardSubtitle="Deaths caused by COVID-19."
+                                        lastUpdate={country.data.updated}
+                                    />
+                                </Grid>
+                            </Suspense>
                             <br/>
-                            <Grid container spacing={3} justifyContent="center">
-                                <CardComponent
-                                    className="infected"
-                                    cardTitle="Last 24 hours Infected"
-                                    value={country.data.todayCases}
-                                    cardSubtitle="Active cases for COVID-19."
-                                    lastUpdate={country.data.updated}
-                                />
-                                <CardComponent
-                                    className="recovered"
-                                    cardTitle="Last 24 hours Recovered"
-                                    value={country.data.todayRecovered}
-                                    cardSubtitle="Recoveries from COVID-19."
-                                    lastUpdate={country.data.updated}
-                                />
-                                <CardComponent
-                                    className="deaths"
-                                    cardTitle="Last 24 hours Deaths"
-                                    value={country.data.todayDeaths}
-                                    cardSubtitle="Deaths caused by COVID-19."
-                                    lastUpdate={country.data.updated}
-                                />
-                            </Grid>
                             <br/>
-                            <br/>
-                            <Grid container spacing={3} justifyContent="center">
-                                <CardComponent
-                                    className="infected"
-                                    cardTitle="Total Infected"
-                                    value={country.data.cases}
-                                    cardSubtitle="Active cases for COVID-19."
-                                    lastUpdate={country.data.updated}
-                                />
-                                <CardComponent
-                                    className="recovered"
-                                    cardTitle="Total Recovered"
-                                    value={country.data.recovered}
-                                    cardSubtitle="Recoveries from COVID-19."
-                                    lastUpdate={country.data.updated}
-                                />
-                                <CardComponent
-                                    className="deaths"
-                                    cardTitle="Total Deaths"
-                                    value={country.data.deaths}
-                                    cardSubtitle="Deaths caused by COVID-19."
-                                    lastUpdate={country.data.updated}
-                                />
-                            </Grid>
+                            <Suspense fallback={<Loading/>}>
+                                <Grid container spacing={3} justifyContent="center">
+                                    <CardComponent
+                                        className="infected"
+                                        cardTitle="Total Infected"
+                                        value={country.data.cases}
+                                        cardSubtitle="Active cases for COVID-19."
+                                        lastUpdate={country.data.updated}
+                                    />
+                                    <CardComponent
+                                        className="recovered"
+                                        cardTitle="Total Recovered"
+                                        value={country.data.recovered}
+                                        cardSubtitle="Recoveries from COVID-19."
+                                        lastUpdate={country.data.updated}
+                                    />
+                                    <CardComponent
+                                        className="deaths"
+                                        cardTitle="Total Deaths"
+                                        value={country.data.deaths}
+                                        cardSubtitle="Deaths caused by COVID-19."
+                                        lastUpdate={country.data.updated}
+                                    />
+                                </Grid>
+                            </Suspense>
                         </div>
                         <div>
                             <Grid container spacing={3} justifyContent="center">
                                 <Grid item xs={12} md={6} className="chart-container" >
-                                    <CountryLineChart deaths={dailyData.deaths}/>
+                                    {
+                                        (error) ? (
+                                            <Typography>Country not found or doesn't have any historical data</Typography>
+                                        ) : (
+                                            <CountryLineChart deaths={dailyData.deaths}/>
+                                        )
+                                    }
                                 </Grid>
                                 <Grid item xs={12} md={3} className="pie-chart-container" >
                                     <Pie
@@ -127,4 +154,4 @@ export const SelectCountry = () => {
             }
         </Container>
     )
-}
+};

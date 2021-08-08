@@ -1,9 +1,10 @@
 import React from "react";
 import {Line} from "react-chartjs-2";
+import {Loading} from "./Skeleton";
 
 export const CountryLineChart = (props) => {
     if (!props.deaths) {
-        return <div></div>;
+        return <Loading/>;
     }
     let dates = [];
     let allDeaths = [];
