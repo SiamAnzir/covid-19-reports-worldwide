@@ -1,28 +1,15 @@
 import axios from "axios";
 
-const url =  'https://covid19.mathdro.id/api';
+const url =  'https://disease.sh/v3/covid-19/all';
 
 export const fetchGlobalData = async () => {
     try {
-        const {data: { confirmed, recovered, deaths, lastUpdate }} = await axios.get(url)
+        const {data: { cases , recovered, deaths, updated }} = await axios.get(url)
 
-        return { confirmed, recovered, deaths, lastUpdate };
+        return { cases , recovered, deaths, updated };
     }
     catch (error){
-        return error
-    }
-};
-
-export const fetchGraphData = async () => {
-    try {
-        const {data} = await axios.get('https://covid19.mathdro.id/api/daily')
-        return data.map(({confirmed, deaths, reportDate: date}) => ({
-            confirmed: confirmed.total,
-            deaths: deaths.total,
-            date
-        }));
-    } catch (error) {
-        return error
+        return error;
     }
 };
 
@@ -32,7 +19,7 @@ export const fetchDailyData = async () => {
         return {data};
     }
     catch (error){
-        return error
+        return error;
     }
 }
 export const fetchCountriesData = async () => {
@@ -51,6 +38,16 @@ export const fetchCountryInfo = async (country) => {
 
         return {data};
     } catch (error) {
+        return error;
+    }
+}
+export const fetchCountryDailyData = async (country) => {
+    try {
+        const {data} = await axios.get(`https://disease.sh/v3/covid-19/historical/${country}?lastdays=all`);
+
+        return {data};
+    }
+    catch (error){
         return error;
     }
 }
