@@ -15,7 +15,7 @@ export const HeaderComponent = (props) => {
     return(
         <div className="header-component">
             <div className="header-text">
-                <h2><FontAwesomeIcon icon={faVirus} color="red"/> Corona Reports Worldwide <FontAwesomeIcon icon={faVirus} color="red"/> </h2>
+                <h2><FontAwesomeIcon icon={faVirus} color="red"/> Covid-19 Reports Worldwide <FontAwesomeIcon icon={faVirus} color="red"/> </h2>
             </div>
             <div className="header-icons">
                 {
