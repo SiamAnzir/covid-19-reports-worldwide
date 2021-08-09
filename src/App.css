@@ -40,8 +40,7 @@ body {
 
 .chart-container {
   display: flex;
-  justify-content: center;
-  width: 65%;
+  width: 100%;
 }
 .selectCountry{
   text-align: center;
@@ -51,10 +50,41 @@ body {
   width: 30%;
   margin-bottom: 30px !important;
 }
+.pie-chart-container{
+  padding-left: 4rem;
+  width: 30%;
+  justify-content: center;
+}
 .flagLogo{
   height: 20px;
   width: 35px;
   margin-left: .5rem;
+}
+.skeleton{
+  width: 100%;
+}
+.header-component {
+  display: flex;
+}
+.header-component::before, .header-text, .header-icons {
+  content: '';
+  flex-basis: 100%;
+}
+.header-text {
+  text-align: center;
+}
+.header-icons {
+  text-align: right;
+  margin-right: .7rem;
+  margin-top: .7rem;
+}
+.footer{
+  padding: 1rem;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-top-style: solid;
+  border-top-width: medium;
 }
 
 @media only screen and (max-width: 770px) {
