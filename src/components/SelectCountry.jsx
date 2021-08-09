@@ -6,10 +6,19 @@ import {FormControl, NativeSelect, Container, Typography, Grid} from "@material-
 import {Pie} from "react-chartjs-2";
 import {CountryLineChart} from "./CountryChart";
 import {Loading} from "./Skeleton";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+    faBan,
+    faClinicMedical, faFlag,
+    faHandHoldingMedical, faSearch,
+    faSkull,
+    faSkullCrossbones,
+    faVirus, faViruses
+} from "@fortawesome/free-solid-svg-icons";
 
 const CardComponent = lazy(() => import('./CardComponent'));
 
-export const SelectCountry = () => {
+export const SelectCountry = (props) => {
 
     const [countries, setCountries] = useState([]);
     const [country, setCountry] = useState({});
@@ -47,17 +56,21 @@ export const SelectCountry = () => {
     return(
         <Container className="selectCountry">
             <br/>
-            <Typography gutterBottom variant="h5" component="h2">Country Base Reports</Typography>
-            <FormControl className="formControl">
-                <NativeSelect defaultValue="" onChange={(e) => handleCountryChange(e.target.value)}>
-                    <option value="">Select Country</option>
-                    {countries.map((country, index) => <option key={index} value={country}>{country}</option>)}
+            <Typography gutterBottom variant="h5" component="h2"><FontAwesomeIcon icon={faFlag} /> Country Base Reports <FontAwesomeIcon icon={faSearch}/> </Typography>
+            <FormControl className="formControl" style={{ backgroundColor: props.themeState.cardBackground,
+                color: props.themeState.foreground}}>
+                <NativeSelect defaultValue="" onChange={(e) => handleCountryChange(e.target.value)} style={{ backgroundColor: props.themeState.cardBackground,
+                    color: props.themeState.foreground}}>
+                    <option value="" style={{ backgroundColor: props.themeState.cardBackground,
+                        color: props.themeState.foreground}}> Select Country</option>
+                    {countries.map((country, index) => <option key={index} value={country} style={{ backgroundColor: props.themeState.cardBackground,
+                        color: props.themeState.foreground}}>{country}</option>)}
                 </NativeSelect>
             </FormControl>
             {
                 (!country.data) ? (
                     <div>
-                        <Typography>No Country Selected</Typography>
+                        <Typography><FontAwesomeIcon icon={faBan}/> No Country Selected</Typography>
                     </div>
                 ) : (
                     <Container>
@@ -72,6 +85,9 @@ export const SelectCountry = () => {
                                         value={country.data.todayCases}
                                         cardSubtitle="Active cases for COVID-19."
                                         lastUpdate={country.data.updated}
+                                        cardBackground={props.themeState.cardBackground}
+                                        foreground={props.themeState.foreground}
+                                        icon={faViruses}
                                     />
                                     <CardComponent
                                         className="recovered"
@@ -79,6 +95,9 @@ export const SelectCountry = () => {
                                         value={country.data.todayRecovered}
                                         cardSubtitle="Recoveries from COVID-19."
                                         lastUpdate={country.data.updated}
+                                        cardBackground={props.themeState.cardBackground}
+                                        foreground={props.themeState.foreground}
+                                        icon={faClinicMedical}
                                     />
                                     <CardComponent
                                         className="deaths"
@@ -86,6 +105,9 @@ export const SelectCountry = () => {
                                         value={country.data.todayDeaths}
                                         cardSubtitle="Deaths caused by COVID-19."
                                         lastUpdate={country.data.updated}
+                                        cardBackground={props.themeState.cardBackground}
+                                        foreground={props.themeState.foreground}
+                                        icon={faSkullCrossbones}
                                     />
                                 </Grid>
                             </Suspense>
@@ -99,6 +121,9 @@ export const SelectCountry = () => {
                                         value={country.data.cases}
                                         cardSubtitle="Active cases for COVID-19."
                                         lastUpdate={country.data.updated}
+                                        cardBackground={props.themeState.cardBackground}
+                                        foreground={props.themeState.foreground}
+                                        icon={faVirus}
                                     />
                                     <CardComponent
                                         className="recovered"
@@ -106,6 +131,9 @@ export const SelectCountry = () => {
                                         value={country.data.recovered}
                                         cardSubtitle="Recoveries from COVID-19."
                                         lastUpdate={country.data.updated}
+                                        cardBackground={props.themeState.cardBackground}
+                                        foreground={props.themeState.foreground}
+                                        icon={faHandHoldingMedical}
                                     />
                                     <CardComponent
                                         className="deaths"
@@ -113,13 +141,17 @@ export const SelectCountry = () => {
                                         value={country.data.deaths}
                                         cardSubtitle="Deaths caused by COVID-19."
                                         lastUpdate={country.data.updated}
+                                        cardBackground={props.themeState.cardBackground}
+                                        foreground={props.themeState.foreground}
+                                        icon={faSkull}
                                     />
                                 </Grid>
                             </Suspense>
                         </div>
                         <div>
                             <Grid container spacing={3} justifyContent="center">
-                                <Grid item xs={12} md={6} className="chart-container" >
+                                <Grid item xs={12} md={6} className="chart-container" style={{ backgroundColor: props.themeState.cardBackground,
+                                    color: props.themeState.foreground}}>
                                     {
                                         (error) ? (
                                             <Typography>Country not found or doesn't have any historical data</Typography>
@@ -128,7 +160,8 @@ export const SelectCountry = () => {
                                         )
                                     }
                                 </Grid>
-                                <Grid item xs={12} md={3} className="pie-chart-container" >
+                                <Grid item xs={12} md={3} className="pie-chart-container" style={{ backgroundColor: props.themeState.cardBackground,
+                                    color: props.themeState.foreground}}>
                                     <Pie
                                         data = {{
                                             labels:['Infected', 'Recovered', 'Deaths'],

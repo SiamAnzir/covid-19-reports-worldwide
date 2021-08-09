@@ -3,8 +3,10 @@ import {Line} from "react-chartjs-2";
 import {fetchDailyData} from "../api";
 import { Container, Typography} from "@material-ui/core";
 import {Loading} from "./Skeleton";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {faHandHoldingMedical,faSkullCrossbones, faVirus} from "@fortawesome/free-solid-svg-icons";
 
-export const LineChart = () => {
+export const LineChart = (props) => {
     const [dailyData,setDailyData] = useState([]);
     useEffect(
         () => {
@@ -83,15 +85,19 @@ export const LineChart = () => {
     );
     return(
         <Container maxWidth="md">
-            <div className="card-container">
+            <div className="card-container" style={{ backgroundColor: props.themeState.cardBackground,
+                color: props.themeState.foreground}}>
+                <br/>
                 <Typography gutterBottom variant="h5" component="h3">
-                    Total Infected & Recovered
+                    <FontAwesomeIcon icon={faVirus}/> Total Infected & Recovered <FontAwesomeIcon icon={faHandHoldingMedical}/>
                 </Typography>
                 {infectedLineChart}
             </div>
-            <div className="card-container">
+            <div className="card-container" style={{ backgroundColor: props.themeState.cardBackground,
+                color: props.themeState.foreground}}>
+                <br/>
                 <Typography gutterBottom variant="h5" component="h3">
-                    Total Deaths
+                    <FontAwesomeIcon icon={faSkullCrossbones}/> Total Deaths
                 </Typography>
                 {deathLineChart}
             </div>
